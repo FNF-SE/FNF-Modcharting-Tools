@@ -388,7 +388,7 @@ class ModchartEditorState extends #if (PSYCH && PSYCHVERSION >= "0.7") backend.M
         }
         #end
 
-		if (PlayState.SONG == null) PlayState.SONG = Song.loadFromJson('tutorial');
+		if (PlayState.SONG == null) PlayState.SONG = Song.loadFromJson('test', 'test'); // wow test test
 		Conductor.mapBPMChanges(PlayState.SONG);
         #if (PSYCH && PSYCHVERSION >= "0.7")
 		Conductor.bpm = PlayState.SONG.bpm;

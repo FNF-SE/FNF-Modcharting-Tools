@@ -117,7 +117,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
             tweenManager.update(elapsed); //should be automatically paused when you pause in game
             timerManager.update(elapsed);
         } catch(e) {
-            trace(e);
+            //trace(e);
         }
         super.update(elapsed);
     }
