@@ -47,46 +47,58 @@ class SustainStrip extends FlxStrip
     }
 
     public function constructVertices(noteData:NotePositionData, thisNotePos:Vector3D, nextHalfNotePos:NotePositionData, nextNotePos:NotePositionData, flipGraphic:Bool, reverseClip:Bool)
-    {
-        var yOffset = -1; //fix small gaps
-        if (reverseClip)
-            yOffset *= -1;
+	{
+		var safeDenom = function(z:Float):Float {
+			var denom = -z;
+			if (denom <= 0.000001) denom = 0.000001;
+			return denom;
+		}
 
-        var verts:Array<Float> = [];
-        if (flipGraphic)
-        {
-            verts.push(nextNotePos.x);
-            verts.push(nextNotePos.y); //slight offset to fix small gaps
-            verts.push(nextNotePos.x+(daNote.frameWidth*(1/-nextNotePos.z)*noteData.scaleX));
-            verts.push(nextNotePos.y);
+		var pointWidth = function(frameWidth:Float, z:Float, scaleX:Float):Float {
+			return frameWidth * (1.0 / safeDenom(z)) * scaleX;
+		}
 
-            verts.push(nextHalfNotePos.x);
-            verts.push(nextHalfNotePos.y);
-            verts.push(nextHalfNotePos.x+(daNote.frameWidth*(1/-nextHalfNotePos.z)*noteData.scaleX));
-            verts.push(nextHalfNotePos.y);
+		var startW = daNote.frameWidth * noteData.scaleX;
+		var endW = daNote.frameWidth * nextNotePos.scaleX;
+		var midW = pointWidth(daNote.frameWidth, nextHalfNotePos.z, nextHalfNotePos.scaleX);
 
-            verts.push(thisNotePos.x);
-            verts.push(thisNotePos.y);
-            verts.push(thisNotePos.x+(daNote.frameWidth*(1/-thisNotePos.z)*nextNotePos.scaleX));
-            verts.push(thisNotePos.y);
-        }
-        else 
-        {
-            verts.push(thisNotePos.x);
-            verts.push(thisNotePos.y); //fliped this with the down ones (last) to test if it bugs of it fixes itself
-            verts.push(thisNotePos.x+(daNote.frameWidth*(1/-thisNotePos.z)*noteData.scaleX));
-            verts.push(thisNotePos.y);
+		var verts:Array<Float> = [];
 
-            verts.push(nextHalfNotePos.x);
-            verts.push(nextHalfNotePos.y);
-            verts.push(nextHalfNotePos.x+(daNote.frameWidth*(1/-nextHalfNotePos.z)*noteData.scaleX));
-            verts.push(nextHalfNotePos.y);
+		if (flipGraphic)
+		{
+			verts.push(nextNotePos.x);
+			verts.push(nextNotePos.y);
+			verts.push(nextNotePos.x + endW);
+			verts.push(nextNotePos.y);
 
-            verts.push(nextNotePos.x);
-            verts.push(nextNotePos.y); //slight offset to fix small gaps
-            verts.push(nextNotePos.x+(daNote.frameWidth*(1/-nextNotePos.z)*nextNotePos.scaleX));
-            verts.push(nextNotePos.y);
-        }
-        vertices = new DrawData(12, true, verts);
-    }
+			verts.push(nextHalfNotePos.x);
+			verts.push(nextHalfNotePos.y);
+			verts.push(nextHalfNotePos.x + midW);
+			verts.push(nextHalfNotePos.y);
+
+			verts.push(thisNotePos.x);
+			verts.push(thisNotePos.y);
+			verts.push(thisNotePos.x + startW);
+			verts.push(thisNotePos.y);
+		}
+		else
+		{
+			verts.push(thisNotePos.x);
+			verts.push(thisNotePos.y);
+			verts.push(thisNotePos.x + startW);
+			verts.push(thisNotePos.y);
+
+			verts.push(nextHalfNotePos.x);
+			verts.push(nextHalfNotePos.y);
+			verts.push(nextHalfNotePos.x + midW);
+			verts.push(nextHalfNotePos.y);
+
+			verts.push(nextNotePos.x);
+			verts.push(nextNotePos.y);
+			verts.push(nextNotePos.x + endW);
+			verts.push(nextNotePos.y);
+		}
+
+		vertices = new DrawData(12, true, verts);
+	}
 }
