@@ -32,13 +32,13 @@ class NotePositionData implements IFlxDestroyable
         return pool.get();
     }
 
-    public function setupStrum(x:Float, y:Float, z:Float, lane:Int, scaleX:Float, scaleY:Float, skewX:Float, skewY:Float, pf:Int)
+    public function setupStrum(x:Float, y:Float, z:Float, lane:Int, scaleX:Float, scaleY:Float, skewX:Float, skewY:Float, pf:Int, alpha:Float)
     {
         this.x = x;
         this.y = y;
         this.z = z;
         this.angle = 0;
-        this.alpha = 1;
+        this.alpha = alpha;
         this.scaleX = scaleX; 
         this.scaleY = scaleY; 
         this.skewX = skewX; 

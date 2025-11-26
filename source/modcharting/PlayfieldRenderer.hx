@@ -169,8 +169,17 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
             strumScaleX = 1*PlayState.daPixelZoom;
             strumScaleY = 1*PlayState.daPixelZoom;
         }
+        var isOpponent:Bool = (i < 4 && !playStateInstance.characterPlayingAsDad) || (i >= 4 && playStateInstance.characterPlayingAsDad);
+        var strumAlpha:Float = 1;
+        if (isOpponent)
+            if (!ClientPrefs.data.opponentStrums)
+                strumAlpha = 0;
+            else if (ClientPrefs.data.middleScroll)
+                strumAlpha = 0.35;
+            else
+                strumAlpha = 1;
         var strumData:NotePositionData = NotePositionData.get();
-        strumData.setupStrum(strumX, strumY, strumZ, i, strumScaleX, strumScaleY, strumSkewX, strumSkewY, pf);
+        strumData.setupStrum(strumX, strumY, strumZ, i, strumScaleX, strumScaleY, strumSkewX, strumSkewY, pf, strumAlpha);
         playfields[pf].applyOffsets(strumData);
         modifierTable.applyStrumMods(strumData, i, pf);
         return strumData;
@@ -201,7 +210,13 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         var noteSkewX = notes.members[noteIndex].skew.x;
         var noteSkewY = notes.members[noteIndex].skew.y;
 
+        var isOpponent:Bool = (lane < 4 && !playStateInstance.characterPlayingAsDad) || (lane >= 4 && playStateInstance.characterPlayingAsDad);
         var noteAlpha:Float = #if PSYCH notes.members[noteIndex].multAlpha; #else notes.members[noteIndex].isSustainNote ? 0.6 : 1; #end
+        if (isOpponent)
+            if (!ClientPrefs.data.opponentStrums)
+                noteAlpha = 0;
+            else if (ClientPrefs.data.middleScroll)
+                noteAlpha = 0.35;
 
         if (ModchartUtil.getIsPixelStage(instance))
         {
